@@ -1,0 +1,111 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.utp.databaseprocess;
+
+import org.utp.database.ToolProfile;
+import org.utp.database.ToolUrl;
+import org.utp.dbhelper.LTI2DBConnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+/**
+ *
+ * @author mukul
+ */
+public class ToolUrlProcess {
+    
+    
+     public void insert(ToolUrl toolUrl) {
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        /* Establish connection with the database if not already connected */
+        if (LTI2DBConnection.isClosed(con)) {
+            con = LTI2DBConnection.getDBConnection();
+        }
+
+        if (!LTI2DBConnection.isClosed(con)) {
+            try {
+                /*turn off auto commit*/
+                con.setAutoCommit(false);
+
+                /*set a save point*/
+                /*Insert the value into question_attempt_history*/
+                pstmt = con.prepareStatement("INSERT INTO tool_url VALUES(?,?)");
+
+                pstmt.setInt(1, toolUrl.getId());
+                pstmt.setString(2, toolUrl.getUrl());
+                
+
+                pstmt.executeUpdate();
+                System.out.println("f");
+                con.commit();
+
+            } catch (SQLException sqle) {
+
+            } finally {
+                LTI2DBConnection.closePStatement(pstmt);
+                LTI2DBConnection.closeDBConnection(con);
+            }
+
+        }
+    }
+     
+     public String getToolUrl(int id) {
+
+        String toolUrl = null;
+
+        /*Initialising object of ResultSet*/
+        ResultSet result = null;
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        /* Establish connection with the database if not already connected */
+        if (LTI2DBConnection.isClosed(con)) {
+            con = LTI2DBConnection.getDBConnection();
+        }
+
+        if (!LTI2DBConnection.isClosed(con)) {
+            try {
+
+                /* SQL statement to to find whether 
+                 * this question is attempted by this 
+                 * user id or not
+                 */
+                String sql = "SELECT url FROM  tool_url where "
+                        + "id = ? ";
+
+                /* 
+                 * Set the values in the sql statement
+                 */
+                pstmt = con.prepareStatement(sql);
+                pstmt.setInt(1, id);
+
+                result = pstmt.executeQuery();
+
+                /*calculate the result and store in answer variable*/
+                if (result.next()) {
+                    toolUrl = result.getString(1);
+
+                }
+
+            } catch (SQLException sqle) {
+                toolUrl = null;
+            } finally {
+                LTI2DBConnection.closePStatement(pstmt);
+                LTI2DBConnection.closeDBConnection(con);
+                LTI2DBConnection.closeResultSet(result);
+            }
+
+        }
+        return toolUrl;
+    }
+    
+}

@@ -1,0 +1,104 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.utp.databaseprocess;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import org.utp.database.BltiKeys;
+import org.utp.dbhelper.LTI2DBConnection;
+import java.sql.ResultSet;
+
+/**
+ *
+ * @author mukul15
+ */
+public class BltiKeysProcess {
+
+    /**
+     *
+     */
+    public void insert(BltiKeys bltiKeys) {
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        /* Establish connection with the database if not already connected */
+        if (LTI2DBConnection.isClosed(con)) {
+            con = LTI2DBConnection.getDBConnection();
+        }
+
+        if (!LTI2DBConnection.isClosed(con)) {
+            try {
+                /*turn off auto commit*/
+                con.setAutoCommit(false);
+
+                /*set a save point*/
+                /*Insert the value into question_attempt_history*/
+                pstmt = con.prepareStatement("INSERT INTO blti_keys VALUES(?,?)");
+
+                pstmt.setString(1, bltiKeys.getOauthConsumerKey());
+                pstmt.setString(2, bltiKeys.getSecret());
+
+                pstmt.executeUpdate();
+                  System.out.println("f");
+                con.commit();
+
+            } catch (SQLException sqle) {
+
+            } finally {
+                LTI2DBConnection.closePStatement(pstmt);
+                LTI2DBConnection.closeDBConnection(con);
+            }
+
+        }
+    }
+
+    /**
+     *
+     * @param bltiKeys
+     */
+    public String getSecret(String oauthConsumerKey) {
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        String secret= null;
+        String sql;
+
+        /*Initialising object of ResultSet*/
+        ResultSet result = null;
+        /* Establish connection with the database if not already connected */
+        if (LTI2DBConnection.isClosed(con)) {
+            con = LTI2DBConnection.getDBConnection();
+        }
+
+        if (!LTI2DBConnection.isClosed(con)) {
+            try {
+
+                /*Insert the value into question_attempt_history*/
+                sql = ("SELECT secret FROM blti_keys WHERE oauth_consumer_key=?");
+                pstmt = con.prepareStatement(sql);
+                pstmt.setString(1, oauthConsumerKey);
+
+                result = pstmt.executeQuery();
+
+                /*fetch the result in totalquestion variable*/
+                if (result.next()) {
+                    //correctAnswer.setCorrectAnswer(result.getInt(1));
+                    secret = result.getString(1);
+                }
+
+            } catch (SQLException sqle) {
+
+            } finally {
+                LTI2DBConnection.closePStatement(pstmt);
+                LTI2DBConnection.closeResultSet(result);
+                LTI2DBConnection.closeDBConnection(con);
+            }
+
+        }
+        return secret;
+    }
+}

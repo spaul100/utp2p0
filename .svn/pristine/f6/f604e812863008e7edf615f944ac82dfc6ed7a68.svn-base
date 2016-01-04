@@ -1,0 +1,58 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.utp.database;
+
+/**
+ *
+ * @author mukul15
+ */
+public class ToolProfile {
+    
+    private int profileId;
+    private String ltiVersion;
+    private String jsonProductInstance;
+    private String jsonBaseUrl;
+    private String jsonResourceHandler;
+    
+    public void setProfileId(int profileId){
+        this.profileId = profileId;
+    }
+    
+    public void setLtiVersion(String ltiVersion){
+        this.ltiVersion = ltiVersion;
+    }
+    
+    public void setJsonProductInstance(String jsonProductInstance){
+        this.jsonProductInstance = jsonProductInstance;
+    }
+    
+    public void setJsonBaseUrl(String jsonBaseUrl){
+        this.jsonBaseUrl = jsonBaseUrl;
+    }
+    
+    public void setJsonResourceHandler(String jsonResourceHandler){
+        this.jsonResourceHandler = jsonResourceHandler;
+    }
+    
+    public int getProfileId(){
+        return profileId;
+    }
+    
+    public String getLtiVersion(){
+        return ltiVersion;
+    }
+    
+    public String getJsonProductInstance(){
+        return jsonProductInstance;
+    }
+    
+    public String getJsonBaseUrl(){
+        return jsonBaseUrl;
+    }
+    
+    public String getJsonResourceHandler(){
+        return jsonResourceHandler;
+    }
+}

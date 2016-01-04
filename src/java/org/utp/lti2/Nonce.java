@@ -1,0 +1,60 @@
+
+package org.utp.lti2;
+
+/**
+ * Nonce class performs oAuth nonce validation.
+ *
+ * @author Sourav Kumar Paul
+ * @version 1.0
+ *
+ */
+import java.util.Date;
+import javax.persistence.Id;
+import com.googlecode.objectify.annotation.Cached;
+import java.util.Set;
+import java.util.TreeSet;
+
+@Cached
+public class Nonce {
+
+    @Id
+    String id;
+    Date created;
+    private static Set<String> nonceSet = new TreeSet<String>();
+
+    Nonce() {
+    }
+
+    Nonce(String id) {
+        this.id = id;
+        this.created = new Date();
+    }
+
+    public static boolean isUnique(String nonce, String timestamp) {
+        // This method provides a level of security for OAuth launches for LTI
+        // by verifying that oauth_nonce strings are submitted only once
+        // This protects against eavesdropping and copycat login attacks
+
+        long interval = 5400000L;  // 90 minutes in milliseconds
+        Date now = new Date();
+        Date oldest = new Date(now.getTime() - interval); // converts seconds to millis
+
+        try {
+            //check the timestamp to ensure this is a new launch (within half of the interval)
+            Date stamped = new Date(Long.parseLong(timestamp) * 1000);  // millis since Jan 1, 1970 00:00 UTC
+            if (Math.abs(stamped.getTime() - now.getTime()) > interval / 2) {
+                throw new Exception();  // out of submission interval
+            }
+            for (String a : nonceSet) {
+                if (a.contains(nonce)) {
+                    throw new Exception();
+                }
+            }
+
+            nonceSet.add(nonce);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+}

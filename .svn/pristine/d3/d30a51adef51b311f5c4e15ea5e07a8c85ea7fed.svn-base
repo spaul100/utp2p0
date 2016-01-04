@@ -1,0 +1,457 @@
+<%-- 
+    Document   : index
+    Created on : 16-Jun-2015, 23:09:20
+    Author     : DAYA-PC
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Tool Registration form </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <link rel="stylesheet" type="text/css" href="Design/bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="Design/font-awesome/css/font-awesome.min.css" />
+
+        <script type="text/javascript" src="Design/js/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="Design/bootstrap/js/bootstrap.min.js"></script>
+
+    </head>
+    <body>
+
+        <div class="container">
+
+            <div class="page-header">
+                <h1>TooL Registration <small></small></h1>
+            </div>
+
+            <!-- Registration form - START -->
+            <div class="container">
+                <div class="row">
+                    <form role="form" action="Checkpara" method="POST">
+                        <div class="col-lg-6">
+                            <div class="well well-sm"><strong><span class="glyphicon glyphicon-asterisk"></span>Required Field</strong></div>
+                            <div class="form-group">
+                                <div class="container">
+                                    <h2>LTI Version</h2>
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <div class="form-group" style="margin-left: 30pt;">
+                                                <label for="InputName">Version</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Version" id="InputName" value="LTI-2p0" readonly="readonly">
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                </div>
+
+
+
+                                <div class="container">
+                                    <h2>Product Info</h2>
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Product Name Default Value</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Product_Default_Value" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Product Name Key</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Product_Key" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Product Description Defaultvalue</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Product_Description_Defaultvalue" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Tool Description Key</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Tool_Description_Key" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Product Version</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Product_Version" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Technical Description Defaultvalue</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Technical_Description_Defaultvalue" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Tool Technical Description Key</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Tool_Technical_Description_Key" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="container">
+                                    <h2>Vendor</h2>
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Vendor Name Defaultvalue</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Vendor_Name_Defaultvalue" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Vendor Name Key</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Vendor_Name_Key" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Vendor Description Defaultvalue</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Vendor_Description_Defaultvalue" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Vendor Description Key</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Vendor_Description_Key" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Website</label>
+                                                <div class="input-group">
+                                                    <input type="http" class="form-control" name="Website" id="InputName" placeholder="http" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;">
+                                                <label for="InputEmail">Contact</label>
+                                                <div class="input-group">
+                                                    <input type="email" class="form-control" id="InputEmailFirst" name="Contact" placeholder="Enter Email" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Vender Code</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Vendor_Code" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="container">
+                                    <h2>Product Family</h2>
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Product id</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Product_id" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Product Code</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Product_Code" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                
+
+                                <div class="container">
+                                    <h2>Support Team</h2>
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <div class="form-group" style="margin-left: 30pt;">
+                                                <label for="InputEmail"></label>
+                                                <div class="input-group">
+                                                    <input type="email" class="form-control" id="InputEmailFirst" name="Support_Team" placeholder="Enter Email" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="container">
+                                    <h2>Service Provider</h2>
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Service Provider Name Defaultvalue</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Service_Provider_Name_Defaultvalue" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Service Provider Name Key</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Service_Provider_Name_Key" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Service Provider Description Defaultvalue</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Service_Provider_Description_Defaultvalue" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Service Provider Description Key</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Service_Provider_Description_Key" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;">
+                                                <label for="InputEmail">Service Provider Support</label>
+                                                <div class="input-group">
+                                                    <input type="email" class="form-control" id="InputEmailFirst" name="Service_Provider_Support" placeholder="Enter Email" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">GUID</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Service_Provider_guid" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="container">
+                                    <h2>Service Owner</h2>
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Service Owner Name Defaultvalue</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Service_Owner_Name_Defaultvalue" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Service Owner Name Key</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Service_Owner_Name_Key" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Service Owner Description Defaultvalue</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Service_Owner_Description_Defaultvalue" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Service Owner Description Key</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Service_Owner_Description_Key" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">GUID</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Service_Owner_guid" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="container">
+                                    <h2>Resource Handler</h2>
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">LTI Launch Path</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="lti_path" value="lti/launch" readonly ="readonly" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Message Type</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="message_type" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Resourse Type Code</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Resourse_Type_Code" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Resourse Name DefaultValue</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Resourse_Name_DefaultValue" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Resourse Name DefaultKey</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Resourse_Name_DefaultKey" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Resourse Description DefaultValue</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Resourse_Description_DefaultValue" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Resourse Description DefaultKey</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Resourse_Description_DefaultKey" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="container" style="float: left; width: 50%">
+                                                <h2>Capability Offered</h2>
+                                                <div class="panel panel-default">
+                                                    <div class="panel-body">
+                                                        <select name="Capability_Offered" multiple style="width:100%" size="10">
+                                                            <option value="basic-lti-launch-request">basic-lti-launch-request</option>
+                                                            <option value="Context.id">Context.id</option>
+                                                            <option value="CourseSection.label">CourseSection.label</option>
+                                                            <option value="CourseSection.longDescription">CourseSection.longDescription</option>
+                                                            <option value="CourseSection.sourceId">CourseSection.sourceId</option>
+                                                            <option value="CourseSection.timeFrame.begin">ToolProxy.collection</option>
+                                                            <option value="CourseSection.title">CourseSection.title</option>
+                                                            <option value="Membership.role">Membership.role</option>
+                                                            <option value="Person.address.country">Person.address.country</option>
+                                                            <option value="Person.address.locality">Person.address.locality</option>
+                                                            <option value="Person.address.street1">Person.address.street1</option>
+                                                            <option value="Person.address.timezone">Person.address.timezone</option>
+                                                            <option value="Person.email.primary">Person.email.primary</option>
+                                                            <option value="Person.name.family">Person.name.family</option>
+                                                            <option value="Person.name.full">Person.name.full</option>
+                                                            <option value="Person.name.given">Person.name.given</option>
+                                                            <option value="Person.name.middle">Person.name.middle</option>
+                                                            <option value="Person.phone.mobile">Person.phone.mobile</option>
+                                                            <option value="Person.phone.primary">Person.phone.primary</option>
+                                                            <option value="Person.sourceId">Person.sourceId</option>
+                                                            <option value="Person.webaddress">Person.webaddress</option>
+                                                            <option value="ResourceLink.description">ResourceLink.description</option>
+                                                            <option value="ResourceLink.id">ResourceLink.id</option>
+                                                            <option value="ResourceLink.title">ResourceLink.title</option>
+                                                            <option value="Result.autocreate">Result.autocreate</option>
+                                                            <option value="Result.sourceId">Result.sourceId</option>
+                                                            <option value="User.id">User.id</option>
+                                                            <option value="User.username">User.username</option>
+
+                                                        </select>
+       
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="container" style="float: right; width: 50%">
+                                                <h2>Services Offered</h2>
+                                                <div class="panel panel-default">
+                                                    <div class="panel-body">
+                                                        <select name="Services_Offered"  multiple style="width:100%">
+                                                            <option value="Tool Consumer Profile">Tool Consumer Profile</option>
+                                                            <option value="Tool Proxy">Tool Proxy</option>
+                                                            <option value="Tool Settings">Tool Settings</option>
+                                                            
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="container">
+                                    <h2>Tool Url</h2>
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <div class="form-group" style="margin-left: 30pt;";">
+                                                <label for="InputName">Url</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" name="Tool_Url" id="InputName" placeholder="" required>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="InputMessage">Enter Message</label>
+                                    <div class="input-group">
+                                        <textarea name="InputMessage" id="InputMessage" class="form-control" rows="4" required></textarea>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                                    </div>
+                                </div>
+                                <input type="submit" name="submit" id="submit" value="Submit" class="btn btn-info pull-right">
+                            </div>
+
+                        </div>
+                    </form>
+
+                </div>
+                <!-- Registration form - END -->
+
+            </div>
+        </div>
+
+
+    </body>
+</html>

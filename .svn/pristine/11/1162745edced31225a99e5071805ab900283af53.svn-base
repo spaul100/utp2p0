@@ -1,0 +1,268 @@
+/**
+ * LTI Launch servlet helps in registering the LTI Tool in any LTI Tool
+ * Consumer.
+ *
+ * @author Sourav Kumar Paul
+ * @version 1.0
+ *
+ */
+package org.utp.lti2;
+
+/**
+ *
+ * @author DAYA-PC
+ */
+import com.google.appengine.labs.repackaged.org.json.JSONArray;
+import com.google.appengine.labs.repackaged.org.json.JSONException;
+import org.utp.databaseprocess.BltiKeysProcess;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import net.oauth.OAuthAccessor;
+import net.oauth.OAuthConsumer;
+import net.oauth.OAuthMessage;
+import net.oauth.OAuthValidator;
+import net.oauth.SimpleOAuthValidator;
+import net.oauth.server.OAuthServlet;
+import net.oauth.signature.OAuthSignatureMethod;
+import org.utp.databaseprocess.ToolDetailsProcess;
+import org.utp.databaseprocess.ToolUrlProcess;
+
+public class LTILaunch extends HttpServlet {
+
+    private static final long serialVersionUID = 137L;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+    }
+
+    @Override
+    /**
+     * This method receives post launch request from LTI Tool Consumer. Redirect
+     * tool consumer user to the tool upon success otherwise shows failure
+     * message.
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String uri = request.getRequestURI();
+
+        String[] parts = uri.split("/");
+        boolean flag = false;
+        int index = -1;
+        for (int i = 0; i < parts.length; i++) {
+            if (parts[i].equals("launch")) {
+                flag = true;
+                index = i;
+                break;
+            }
+        }
+        if (flag) {
+            String id = parts[index + 1];
+            ToolDetailsProcess check = new ToolDetailsProcess();
+            if (!check.isValid(Integer.parseInt(id))) {
+                String msg = "Please provide valid launch url";
+                doError(request, response, msg, null, null);
+                return;
+            }
+            // check for minimum required elements for a basic-lti-launch-request
+            String lti_message_type = request.getParameter("lti_message_type");
+
+            if ("ToolProxyRegistrationRequest".equals(lti_message_type)) {  // redirect this LTI registration request
+                String msg = "Please POST LTI registration requests to https://" + request.getServerName() + "/lti/register/";
+                doError(request, response, msg, null, null);
+                return;
+            } else if (!"basic-lti-launch-request".equals(lti_message_type)) {
+                doError(request, response, "Missing or invalid lti_message_type parameter.", null, null);
+                return;
+            }
+
+            String lti_version = request.getParameter("lti_version");
+            if (lti_version == null) {
+                doError(request, response, "Missing lti_version parameter.", null, null);
+                return;
+            }
+
+            String oauth_consumer_key = request.getParameter("oauth_consumer_key");
+            if (oauth_consumer_key == null) {
+                doError(request, response, "Missing oauth_consumer_key.", null, null);
+                return;
+            }
+
+            BltiKeysProcess keysProcess = new BltiKeysProcess();
+            String oauth_secret = keysProcess.getSecret(oauth_consumer_key);
+
+            if (oauth_secret == null) {
+                doError(request, response, "Invalid oauth_consumer_key.", null, null);
+                return;
+            }
+
+            OAuthMessage oam = OAuthServlet.getMessage(request, null);
+            OAuthValidator oav = new SimpleOAuthValidator();
+            OAuthConsumer cons = new OAuthConsumer("about:blank#OAuth+CallBack+NotUsed",
+                    oauth_consumer_key, oauth_secret, null);
+
+            OAuthAccessor acc = new OAuthAccessor(cons);
+
+            String base_string = null;
+            try {
+                base_string = OAuthSignatureMethod.getBaseString(oam);
+            } catch (Exception e) {
+                base_string = null;
+            }
+
+            try {
+                if (!Nonce.isUnique(request.getParameter("oauth_nonce"), request.getParameter("oauth_timestamp"))) {
+                    throw new Exception("Bad nonce or timestamp.");
+                }
+                oav.validateMessage(oam, acc);
+            } catch (Exception e) {
+                if (base_string != null) {
+                }
+                return;
+            }
+            // BLTI Launch message was validated successfully. 
+
+            ToolDetailsProcess customParam = new ToolDetailsProcess();
+            JSONArray requiredCustom = null;
+            try {
+                requiredCustom = new JSONArray(customParam.getRecommendedParameter(Integer.parseInt(id)));
+            } catch (JSONException ex) {
+                Logger.getLogger(LTILaunch.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            ArrayList<String> reqCustom = new ArrayList<String>();
+
+            if (requiredCustom != null) {
+                int len = requiredCustom.length();
+                for (int i = 0; i < len; i++) {
+                    try {
+                        reqCustom.add("custom_" + requiredCustom.get(i).toString());
+                    } catch (JSONException ex) {
+                        Logger.getLogger(LTILaunch.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+            int countReqCustomParameters = 0;
+            Enumeration<String> en = request.getParameterNames();
+            while (en.hasMoreElements()) {
+                String param = en.nextElement();
+                if (reqCustom.contains(param)) {
+                    countReqCustomParameters++;
+                }
+            }
+            if (countReqCustomParameters != reqCustom.size()) {
+                String msg = "Required Custom Parameters are missing";
+                doError(request, response, msg, null, null);
+
+            }
+            ToolUrlProcess toolUrl = new ToolUrlProcess();
+            response.setContentType("text/html");
+            PrintWriter out = response.getWriter();
+            out.print("<!DOCTYPE html><html>\n"
+                    + "<body onload=\"document.createElement('form').submit.call(document.getElementById('myForm'))\">\n"
+                    + "<form id=\"myForm\" name=\"myForm\" action=\"" + toolUrl.getToolUrl(Integer.parseInt(id)) + "\" method=\"POST\">\n");
+            en = request.getParameterNames();
+            while (en.hasMoreElements()) {
+                String param = en.nextElement();
+                if (param.equals("custom_membership_role") && param.equals("membership_role")) {
+                    out.print("<input type=hidden name=\"" + param + "\"  value=\"" + roleTranslate(request.getParameter(param)) + "\">\n");
+                } else {
+                    out.print("<input type=hidden name=\"" + param + "\"  value=\"" + request.getParameter(param) + "\">\n");
+                }
+            }
+            out.print("<input type=hidden name=\"Parent\"  value=\"" + request.getParameter("tool_consumer_info_product_family_code") + "\">\n"
+                    + "<input type=hidden name=\"submit\" id=\"submit\" value=\"Continue\"/>\n"
+                    + "</form>\n"
+                    + "</body>\n"
+                    + "</html>");
+        } else {
+            String msg = "Please provide valid launch url";
+            doError(request, response, msg, null, null);
+            return;
+        }
+
+    }
+
+    /**
+     * This method translates role.
+     *
+     * @param oldRole This parameter contains role that is being sent by tool
+     * consumer.
+     * @return It return new LTI role.
+     */
+    public String roleTranslate(String oldRole) {
+        String newRole;
+        List<String> ltiRoleDefined = Arrays.asList("Learner", "Manager", "Instructor", "ContentDeveloper", "Administrator");
+        if (ltiRoleDefined.contains(oldRole)) {
+            return oldRole;
+        } else {
+            if (oldRole.equals("Student")) {
+                return "Learner";
+            } else if (oldRole.equals("Teacher")) {
+                return "Instructor";
+            } else if (oldRole.equals("Course creator")) {
+                return "ContentDeveloper";
+            }
+
+        }
+
+        return oldRole;
+    }
+
+    /**
+     * This method is used to show error to lti consumer. Upon getting any
+     * exception system is redirected to tool consumer's return url and a
+     * message is appended to it.
+     *
+     * @param request
+     * @param response
+     * @param s It contains message that is been appended to return url upon
+     * getting any exception.
+     * @param message
+     * @param e
+     * @throws java.io.IOException
+     * @return Nothing
+     */
+    public void doError(HttpServletRequest request, HttpServletResponse response,
+            String s, String message, Exception e)
+            throws java.io.IOException {
+        String return_url = request.getParameter("launch_presentation_return_url");
+        if (return_url != null && return_url.length() > 1) {
+            if (return_url.indexOf('?') > 1) {
+                return_url += "&lti_msg=" + URLEncoder.encode(s, "UTF-8");
+            } else {
+                return_url += "?lti_msg=" + URLEncoder.encode(s, "UTF-8");
+            }
+            response.sendRedirect(return_url);
+            return;
+        }
+        PrintWriter out = response.getWriter();
+        out.println(s);
+    }
+
+    @Override
+    public void destroy() {
+
+    }
+
+}

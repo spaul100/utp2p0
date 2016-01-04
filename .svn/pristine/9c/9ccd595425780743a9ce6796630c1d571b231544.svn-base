@@ -1,0 +1,233 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.utp.databaseprocess;
+
+import com.google.appengine.labs.repackaged.org.json.JSONException;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
+import org.utp.database.ToolUrl;
+import org.utp.dbhelper.LTI2DBConnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+/**
+ *
+ * @author mukul
+ */
+public class ToolDetailsProcess {
+
+    /**
+     * return id
+     *
+     * @param toolDetail
+     * @return
+     */
+    public ArrayList insert(String toolDetail) throws JSONException {
+
+        ArrayList list = new ArrayList();
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        int id = 0;
+        /* Establish connection with the database if not already connected */
+        if (LTI2DBConnection.isClosed(con)) {
+            con = LTI2DBConnection.getDBConnection();
+        }
+
+        if (!LTI2DBConnection.isClosed(con)) {
+            try {
+                /*turn off auto commit*/
+                con.setAutoCommit(false);
+
+                /*set a save point*/
+                /*Insert the value into question_attempt_history*/
+                id = nextToolId();
+                pstmt = con.prepareStatement("INSERT INTO tool_detail VALUES(?,?)");
+                
+                ToolUrl ins = new ToolUrl();
+                JSONObject test = new JSONObject();
+                JSONObject json = new JSONObject(toolDetail);
+                   
+                    
+                ins.setId(id);
+                ins.setUrl((String) json.get("Tool_Url"));
+                
+                ToolUrlProcess inse = new ToolUrlProcess();
+                inse.insert(ins);
+                
+                
+                pstmt.setInt(1, id);
+                pstmt.setString(2, toolDetail);
+
+                pstmt.executeUpdate();
+                System.out.println("f");
+                con.commit();
+
+            } catch (SQLException sqle) {
+
+            } finally {
+                LTI2DBConnection.closePStatement(pstmt);
+                LTI2DBConnection.closeDBConnection(con);
+            }
+
+        }
+        list.add("http://localhost/utp2p0/lti/register/" + id);
+        list.add("http://localhost/utp2p0/lti/launch" + id);
+
+        return list;
+    }
+
+    public boolean isValid(int id) {
+
+        int ans = 0;
+
+        /*Initialising object of ResultSet*/
+        ResultSet result = null;
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        /* Establish connection with the database if not already connected */
+        if (LTI2DBConnection.isClosed(con)) {
+            con = LTI2DBConnection.getDBConnection();
+        }
+
+        if (!LTI2DBConnection.isClosed(con)) {
+            try {
+
+                /* SQL statement to to find whether 
+                 * this question is attempted by this 
+                 * user id or not
+                 */
+                String sql = "SELECT count(*) FROM  tool_detail where "
+                        + "id = ? ";
+
+                /* 
+                 * Set the values in the sql statement
+                 */
+                pstmt = con.prepareStatement(sql);
+                pstmt.setInt(1, id);
+
+                result = pstmt.executeQuery();
+
+                /*calculate the result and store in answer variable*/
+                if (result.next()) {
+                     ans = result.getInt(1);
+
+                }
+
+            } catch (SQLException sqle) {
+                ans = -1;
+            } finally {
+                LTI2DBConnection.closePStatement(pstmt);
+                LTI2DBConnection.closeDBConnection(con);
+                LTI2DBConnection.closeResultSet(result);
+            }
+
+        }
+        if(ans==1)
+                return true;
+        else
+                return false;
+    }
+    
+    
+    /**
+     *
+     * @return profileId
+     */
+    public synchronized int nextToolId() {
+
+        ResultSet result = null;
+        int id = 0;
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        /* Establish connection with the database if not already connected */
+        if (LTI2DBConnection.isClosed(con)) {
+            con = LTI2DBConnection.getDBConnection();
+        }
+
+        if (!LTI2DBConnection.isClosed(con)) {
+            try {
+
+                String sql = "SELECT MAX(id) FROM tool_detail";
+                pstmt = con.prepareStatement(sql);
+                result = pstmt.executeQuery();
+                if (result.next()) {
+                    id = result.getInt("MAX(id)");
+                } else {
+                    id = 0;
+                }
+
+                id++;
+
+            } catch (SQLException sqle) {
+                id = -1;
+            } finally {
+                LTI2DBConnection.closePStatement(pstmt);
+                LTI2DBConnection.closeDBConnection(con);
+                LTI2DBConnection.closeResultSet(result);
+
+            }
+        }
+        return id;
+    }
+
+    public String getToolDetail(int id) {
+
+        String toolDetail = null;
+
+        /*Initialising object of ResultSet*/
+        ResultSet result = null;
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        /* Establish connection with the database if not already connected */
+        if (LTI2DBConnection.isClosed(con)) {
+            con = LTI2DBConnection.getDBConnection();
+        }
+
+        if (!LTI2DBConnection.isClosed(con)) {
+            try {
+
+                /* SQL statement to to find whether 
+                 * this question is attempted by this 
+                 * user id or not
+                 */
+                String sql = "SELECT json_tool FROM  tool_detail where "
+                        + "id = ? ";
+
+                /* 
+                 * Set the values in the sql statement
+                 */
+                pstmt = con.prepareStatement(sql);
+                pstmt.setInt(1, id);
+
+                result = pstmt.executeQuery();
+
+                /*calculate the result and store in answer variable*/
+                if (result.next()) {
+                    toolDetail = result.getString(1);
+
+                }
+
+            } catch (SQLException sqle) {
+                toolDetail = null;
+            } finally {
+                LTI2DBConnection.closePStatement(pstmt);
+                LTI2DBConnection.closeDBConnection(con);
+                LTI2DBConnection.closeResultSet(result);
+            }
+
+        }
+        return toolDetail;
+    }
+
+}

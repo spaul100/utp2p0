@@ -1,0 +1,105 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.utp.databaseprocess;
+
+import org.utp.dbhelper.LTI2DBConnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+/**
+ *
+ * @author mukul
+ */
+public class ToolDetailProcess {
+    
+    
+    /**
+     * return id
+     * @param toolProfile
+     */
+    public void insert(String toolDetail) {
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        /* Establish connection with the database if not already connected */
+        if (LTI2DBConnection.isClosed(con)) {
+            con = LTI2DBConnection.getDBConnection();
+        }
+
+        if (!LTI2DBConnection.isClosed(con)) {
+            try {
+                /*turn off auto commit*/
+                con.setAutoCommit(false);
+
+                /*set a save point*/
+                /*Insert the value into question_attempt_history*/
+                int id = nextToolId();
+                pstmt = con.prepareStatement("INSERT INTO tool_detail VALUES(?,?)");
+
+                pstmt.setInt(1, id);
+                pstmt.setString(2, toolDetail);
+                
+
+                pstmt.executeUpdate();
+                System.out.println("f");
+                con.commit();
+
+            } catch (SQLException sqle) {
+
+            } finally {
+                LTI2DBConnection.closePStatement(pstmt);
+                LTI2DBConnection.closeDBConnection(con);
+            }
+        }
+    }
+    
+    /**
+     * 
+     * @return profileId 
+     */
+    public synchronized int nextToolId() {
+
+        ResultSet result = null;
+        int id = 0;
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        /* Establish connection with the database if not already connected */
+        if (LTI2DBConnection.isClosed(con)) {
+            con = LTI2DBConnection.getDBConnection();
+        }
+
+        if (!LTI2DBConnection.isClosed(con)) {
+            try {
+
+                String sql = "SELECT MAX(id) FROM tool_detail";
+                pstmt = con.prepareStatement(sql);
+                result = pstmt.executeQuery();
+                if (result.next()) {
+                    id = result.getInt("MAX(id)");
+                } else {
+                    id = 0;
+                }
+
+                id++;
+
+            } catch (SQLException sqle) {
+                id = -1;
+            } finally {
+                LTI2DBConnection.closePStatement(pstmt);
+                LTI2DBConnection.closeDBConnection(con);
+                LTI2DBConnection.closeResultSet(result);
+
+            }
+        }
+        return id;
+    }
+    
+}

@@ -1,0 +1,4 @@
+deploy.ant.properties.file=C:\\Users\\Sourav Kumar Paul\\AppData\\Roaming\\NetBeans\\8.0.2\\tomcat70.properties
+j2ee.server.home=C:/Users/Sourav Kumar Paul/apache-tomcat-7.0.62
+j2ee.server.instance=tomcat70:home=C:\\Users\\Sourav Kumar Paul\\apache-tomcat-7.0.62
+user.properties.file=C:\\Users\\Sourav Kumar Paul\\AppData\\Roaming\\NetBeans\\8.0.2\\build.properties

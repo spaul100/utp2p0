@@ -1,0 +1,470 @@
+<%-- 
+    Document   : website
+    Created on : Jun 28, 2015, 3:09:58 AM
+    Author     : Sourav Kumar Paul
+--%>
+
+<%@page import="com.google.appengine.labs.repackaged.org.json.JSONObject"%>
+<%@page import="java.util.logging.Logger"%>
+<%@page import="java.util.logging.Level"%>
+<%@page import="com.google.appengine.labs.repackaged.org.json.JSONException"%>
+
+<%@page import="com.google.appengine.labs.repackaged.org.json.JSONArray"%>
+<%@page import="org.utp.database.RegisteredTool"%>
+<%@page import="java.util.Iterator"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.utp.databaseprocess.ToolDetailsProcess"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title>Universal Tool Provider</title>
+
+
+        <link rel='stylesheet prefetch' href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css'>
+
+        <link rel="stylesheet" href="css/login.css">
+
+        <!-- Bootstrap Core CSS -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link href="css/agency.css" rel="stylesheet">
+
+        <!-- Custom Fonts -->
+        <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+        <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+
+    </head>
+
+    <body id="page-top" class="index">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header page-scroll">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand page-scroll" href="#page-top">Universal Tool Provider</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="hidden">
+                            <a href="#page-top"></a>
+                        </li>
+
+                        <li>
+                            <a class="page-scroll" href="#register">Tool Registration</a>
+                        </li>
+                        <li>
+                            <a class="page-scroll" href="#tools">Registered Tools</a>
+                        </li>
+
+                        <li>
+                            <a class="page-scroll" href="#team">Team</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+
+        <!-- Header -->
+        <header>
+            <div class="container">
+                <div class="intro-text">
+                    <div class="intro-lead-in">Welcome To Universal Tool Provider!</div>
+                    <div class="intro-heading">Become LTI 2.0 Compliant</div>
+                    <a href="http://imsglobal.org/lti/#lti2.0" target="_blank" class="page-scroll btn btn-xl">What is LTI 2.0 ?</a>
+                </div>
+            </div>
+        </header>
+
+
+
+        <!-- Portfolio Grid Section -->
+        <section id="register" >
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <h2 class="section-heading">Register your Tool</h2>
+                        <h3 class="section-subheading text-muted">Let us know all the details of your tool.</h3>
+                    </div>
+                </div>
+                <div class="col-lg-12 text-center">
+                    <div id="success"></div>
+                    <a href="#sign" class="btn btn-lg btn-primary" data-toggle="modal">Register</a>
+
+
+                    <div id="sign" class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                                </div>
+                                <div class="modal-body">
+
+                                    <div class="login-card">
+                                        <h3>Authentication</h3><br>
+                                        <form name="loginForm" method="post" action="LoginVerification">
+                                            <input type="text" name="user" placeholder="Username">
+                                            <input type="password" name="pass" placeholder="Password">
+                                            <input type="submit"  class="login login-submit" value="Login" />
+                                        </form>
+
+                                       
+                                    </div>
+
+                                    <!-- <div id="error"><img src="https://dl.dropboxusercontent.com/u/23299152/Delete-icon.png" /> Your caps-lock is on.</div> -->
+                                    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+                                    <script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'></script>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tools" class="bg-light-gray">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <h2 class="section-heading">Registered Tools</h2>
+                        <h3 class="section-subheading text-muted">LTI 2.0 Compliant Tools.</h3>
+                        <%ToolDetailsProcess db = new ToolDetailsProcess();
+                            ArrayList<RegisteredTool> tools = new ArrayList();
+                            tools = db.getRegisteredTool();
+                            ToolDetailsProcess customParam = new ToolDetailsProcess();
+                            int toolId[] = new int[tools.size()];
+                            String toolName[] = new String[tools.size()];
+                            String toolUrl[] = new String[tools.size()];
+                            String toolJson[] = new String[tools.size()];
+                            String requiredParameter[] = new String[tools.size()];
+                            String optionalParameter[] = new String[tools.size()];
+                            int i = 0;
+                            Iterator it;
+
+                            it = tools.iterator();
+                            while (it.hasNext()) {
+                                RegisteredTool ran = (RegisteredTool) it.next();
+                                toolUrl[i] = ran.getRegistrationUrl();
+                                toolName[i] = ran.getToolName();
+                                toolId[i] = ran.gettoolId();
+                                toolJson[i] = ran.getToolProfile();
+                                requiredParameter[i] = customParam.getRecommendedParameter(toolId[i]);
+                                optionalParameter[i] = customParam.getOptionalParameter(toolId[i]);
+                                i = i + 1;
+                            }
+                        %>
+
+                    </div>
+                </div>
+
+
+
+                <div class="container">
+
+                    <table class="table table-bordered">
+                        <thead >
+                            <tr align="center">
+                        <script>
+                            $(document).ready(function () {
+                                $('[data-toggle="tooltip"]').tooltip();
+                            });
+                        </script>
+                        <th ><p align="center">S.No</p></th>
+                        <th><p align="center">Name</p></th>
+                        <th><p align="center">Registration Url</p></th>
+                        <th><p align="center">Required Custom Parameters</p></th>
+                        <th><p align="center" >Optional Custom Parameters</p></th>
+                        <!--   <th><p align="center">View</p></th>  -->
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <% System.out.println(tools.size());
+
+                                for (i = 0; i < tools.size(); i++) {
+                                    int j = i + 1;
+
+
+                            %>
+
+
+
+
+
+                            <tr >
+                                <td align="center"><%=j%></td>
+                                <td align="center"><%= toolName[i]%></td>
+
+                                <td align="center"><%= toolUrl[i]%></td>
+                                <td align="center"><div class="bs-example">
+
+                                        <a href="<%="#" + i%>" class="btn btn-lg btn-primary" data-toggle="modal">Details</a>
+
+
+                                        <div id="<%=i%>" class="modal fade">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <h3 align="center"  >Required Custom Parameters<br></h3>
+                                                        <p>These are required custom parameters. Use as specified in example. Each parameters should be in new line. eg.,<br> req1=1<br>req2=2</p>
+                                                        <div align="left"><pre id="<%="#" + i%>"></pre>
+
+                                                            <script>
+                                                                var data = <%=requiredParameter[i]%>
+
+                                                                document.getElementById("<%="#" + i%>").innerHTML = JSON.stringify(data, undefined, 2);
+                                                            </script> 
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> </td>
+
+                                <td align="center"><div class="bs-example">
+
+                                        <a href="<%="#" + i + "1"%>" class="btn btn-lg btn-primary" data-toggle="modal">Details</a>
+
+
+                                        <div id="<%=i + "1"%>" class="modal fade">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <h3 align="center">Optional Custom Parameters</h3>
+                                                        <p>These are optional custom parameters. Use as specified in example. Each parameters should be in new line. eg.,<br> opt1=1<br>opt2=2</p>
+
+                                                        <div align="left"><pre id="<%="##" + i%>"></pre>
+
+                                                            <script>
+                                                                var data = <%=optionalParameter[i]%>
+
+                                                                document.getElementById("<%="##" + i%>").innerHTML = JSON.stringify(data, undefined, 2);
+                                                            </script> 
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> </td>
+
+
+
+
+
+                                <!--     <td align="center"><div class="bs-example">
+                                             
+                                             <a href="#myModal" class="btn btn-lg btn-primary" data-toggle="modal">Details</a>
+     
+                                             
+                                             <div id="myModal" class="modal fade">
+                                                 <div class="modal-dialog">
+                                                     <div class="modal-content">
+                                                         <div class="modal-header">
+                                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+     
+                                                         </div>
+                                                         <div class="modal-body">
+                                                             <h3 align="center">Tool Details</h3>
+                                                             <div align="left"> <pre id="json2"></pre>
+     
+                                                                 <script>
+                                                                     var data = <%= toolJson[i].toString()%>
+     
+                                                                     document.getElementById("json2").innerHTML = JSON.stringify(data, undefined, 2);
+                                                                 </script> 
+                                                             </div>
+                                                         </div>
+                                                         <div class="modal-footer">
+                                                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                         </div>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                         </div> </td>  -->
+
+                            </tr>
+                            <% }%>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </section>
+
+
+
+
+        <!-- Team Section -->
+        <section id="team" >
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <h2 class="section-heading">Our Team</h2>
+                        <h3 class="section-subheading text-muted">IITB Summer Internship 2015.</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 col-md-4" >
+                        <div class="team-member">
+                            <img src="Design/images/sourav.jpg" class="img-responsive img-circle" alt="">
+                            <h4>Sourav Kr Paul</h4>
+                            <p class="text-muted">Intern</p>
+                            <p class="section-subheading text-muted">(Computer Science And Engineering)<br>NIT Silchar</p>
+                            <ul class="list-inline social-buttons">
+                                <li><a href="https://twitter.com/spaul100" target="_blank"><i class="fa fa-twitter"></i></a>
+                                </li>
+                                <li><a href="https://www.facebook.com/sourav.paul.9889" target="_blank"><i class="fa fa-facebook"></i></a>
+                                </li>
+                                <li><a href="https://www.linkedin.com/profile/view?id=229970388&trk=hp-identity-name" target="_blank"><i class="fa fa-linkedin"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4 col-md-4">
+                        <div class="team-member">
+                            <img src="Design/images/mukul.jpg" class="img-responsive img-circle" alt="">
+                            <h4>Mukul Gupta</h4>
+                            <p class="text-muted">Intern</p>
+                            <p class="section-subheading text-muted">(Computer Science And Engineering)<br>MNIT Jaipur</p>
+
+                            <ul class="list-inline social-buttons">
+                                <li><a href="https://twitter.com/mukulgpt20" target="_blank"><i class="fa fa-twitter"></i></a>
+                                </li>
+                                <li><a href="https://www.facebook.com/mukul.gupta.39108?fref=ts" target="_blank"><i class="fa fa-facebook"></i></a>
+                                </li>
+                                <li><a href="https://www.linkedin.com/hp/?dnr=KBI_S3ZwO2KJeRwmBzylS3-5N28DY4M6m-Zp" target="_blank"><i class="fa fa-linkedin"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-md-4">
+                        <div class="team-member">
+                            <img src="img/team/2.jpg" class="img-responsive img-circle" alt="">
+                            <h4>Vishal Sharma</h4>
+                            <p class="text-muted">Intern</p>
+                            <p class="section-subheading text-muted">(Computer Science And Engineering)<br>MNIT Jaipur</p>
+                            <ul class="list-inline social-buttons">
+                                <li><a href="#"><i class="fa fa-twitter"></i></a>
+                                </li>
+                                <li><a href="https://www.facebook.com/profile.php?id=100002374382028&fref=ts" target="_blank"><i class="fa fa-facebook"></i></a>
+                                </li>
+                                <li><a href="#"><i class="fa fa-linkedin"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-8 col-md-12 ">
+                        <div class="team-member">
+                            <img src="Design/images/Rajanikant.jpg" class="img-responsive img-circle" alt="">
+                            <h4>Rajanikant Jangir</h4>
+                            <p class="text-muted">Mentor</p>
+                            <ul class="list-inline social-buttons">
+                                <li><a href="https://twitter.com/rkjangir85" target="_blank"><i class="fa fa-twitter"></i></a>
+                                </li>
+                                <li><a href="https://www.facebook.com/jangir.raj?fref=ts" target="_blank"><i class="fa fa-facebook"></i></a>
+                                </li>
+                                <li><a href="https://www.linkedin.com/in/rajanikant" target="_blank"><i class="fa fa-linkedin"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2 text-center">
+                        <p class="large text-muted">Developed under Ekalavya Summer Internship 2015 IIT Bombay.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+        <footer class="bg-darkest-gray">
+
+            <div class="container" >
+                <div  >
+                    <div class="col-md-12">
+                        <span  style="color:white">Universal Tool Provider&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Summer Internship IITB 2015</span>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </footer>
+
+
+
+        <!-- jQuery -->
+        <script src="js/jquery.js"></script>
+
+        <!-- Bootstrap Core JavaScript -->
+        <script src="js/bootstrap.min.js"></script>
+
+        <!-- Plugin JavaScript -->
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+        <script src="js/classie.js"></script>
+        <script src="js/cbpAnimatedHeader.js"></script>
+
+        <!-- Contact Form JavaScript -->
+        <script src="js/jqBootstrapValidation.js"></script>
+        <!--<script src="js/contact_me.js"></script>-->
+
+        <!-- Custom Theme JavaScript -->
+        <script src="js/agency.js"></script>
+
+    </body>
+
+</html>

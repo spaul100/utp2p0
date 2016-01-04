@@ -1,0 +1,252 @@
+package org.utp.toolRegistration;
+
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import com.google.appengine.labs.repackaged.org.json.JSONArray;
+import com.google.appengine.labs.repackaged.org.json.JSONException;
+import com.google.appengine.labs.repackaged.org.json.JSONObject;
+import org.utp.databaseprocess.ToolDetailProcess;
+import org.utp.databaseprocess.ToolDetailsProcess;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+// Extend HttpServlet class
+
+public class Checkpara extends HttpServlet {
+
+    // Method to handle GET method request.
+    public void doGet(HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException {
+        // Set response content type
+        response.setContentType("text/html");
+
+        PrintWriter out = response.getWriter();
+        String title = "";
+        String docType
+                = "<!doctype html public \"-//w3c//dtd html 4.0 "
+                + "transitional//en\">\n";
+        String Version = request.getParameter("Version");
+        String Product_Name = request.getParameter("Product_Name");
+        String Product_Default_Value = request.getParameter("Product_Default_Value");
+        String Product_Key = request.getParameter("Product_Key");
+        String Product_Description_Defaultvalue = request.getParameter("Product_Description_Defaultvalue");
+        String Tool_Description_Key = request.getParameter("Tool_Description_Key");
+        String Product_Version = request.getParameter("Product_Version");
+        String Technical_Description_Defaultvalue = request.getParameter("Technical_Description_Defaultvalue");
+        String Tool_Technical_Description_Key = request.getParameter("Tool_Technical_Description_Key");
+        String Vendor_Name_Defaultvalue = request.getParameter("Vendor_Name_Defaultvalue");
+        String Vendor_Name_Key = request.getParameter("Vendor_Name_Key");
+        String Vendor_Description_Defaultvalue = request.getParameter("Vendor_Description_Defaultvalue");
+        String Vendor_Description_Key = request.getParameter("Vendor_Description_Key");
+        String Website = request.getParameter("Website");
+        String Contact = request.getParameter("Contact");
+        String Support_Team = request.getParameter("Support_Team");
+        String Service_Provider_Name_Defaultvalue = request.getParameter("Service_Provider_Name_Defaultvalue");
+        String Service_Provider_Name_Key = request.getParameter("Service_Provider_Name_Key");
+        String Service_Provider_Description_Defaultvalue = request.getParameter("Service_Provider_Description_Defaultvalue");
+        String Service_Provider_Description_Key = request.getParameter("Service_Provider_Description_Key");
+        String Service_Provider_Support = request.getParameter("Service_Provider_Support");
+        String Service_Owner_Name_Defaultvalue = request.getParameter("Service_Owner_Name_Defaultvalue");
+        String Service_Owner_Name_Key = request.getParameter("Service_Owner_Name_Key");
+        String Service_Owner_Description_Defaultvalue = request.getParameter("Service_Owner_Description_Defaultvalue");
+        String Service_Owner_Description_Key = request.getParameter("Service_Owner_Description_Key");
+        String Service_Owner_guid = request.getParameter("Service_Owner_guid");
+        String lti_path = request.getParameter("lti_path");
+        String lti_message_type = request.getParameter("message_type");
+        String Capability_Wanted[] = request.getParameterValues("Capability_Offered");
+        String Services_Wanted[] = request.getParameterValues("Services_Offered");
+        String Tool_Url = request.getParameter("Tool_Url");
+        String Vendor_Code = request.getParameter("Vendor_Code");
+        String Product_id = request.getParameter("Product_id");
+        String Product_Code = request.getParameter("Product_Code");
+        String Service_Provider_guid = request.getParameter("Service_Provider_guid");
+        String Resourse_Type_Code = request.getParameter("Resourse_Type_Code");
+        String Resourse_Name_DefaultValue = request.getParameter("Resourse_Name_DefaultValue");
+        String Resourse_Name_DefaultKey = request.getParameter("Resourse_Name_DefaultKey");
+        String Resourse_Description_DefaultValue = request.getParameter("Resourse_Description_DefaultValue");
+        String Resourse_Description_DefaultKey = request.getParameter("Resourse_Description_DefaultKey");
+        JSONObject toolProfile = null;
+        try {
+            Calendar calendar = Calendar.getInstance();
+            java.util.Date now = calendar.getTime();
+            java.sql.Timestamp currentTimestamp = new java.sql.Timestamp(now.getTime());
+            toolProfile = new JSONObject()
+                    .put("lti_version", "LTI-2p0")
+                    .put("product_instance", new JSONObject()
+                            .put("product_info", new JSONObject()
+                                    .put("product_name", new JSONObject().put("default_value", Product_Default_Value)
+                                            .put("key", Product_Key))
+                                    .put("product_version", Product_Version)
+                                    .put("description", new JSONObject().put("default_value", Product_Description_Defaultvalue)
+                                            .put("key", Tool_Description_Key))
+                                    .put("technical_description", new JSONObject().put("default_value", Technical_Description_Defaultvalue)
+                                            .put("key", Tool_Technical_Description_Key))
+                                    .put("product_family", new JSONObject()
+                                            .put("@id", Product_id)
+                                            .put("code", Product_Code)
+                                            .put("vendor", new JSONObject()
+                                                    .put("code", Vendor_Code)
+                                                    .put("vendor_name", new JSONObject().put("default_value", Vendor_Name_Defaultvalue)
+                                                            .put("key", Vendor_Name_Key))
+                                                    .put("description", new JSONObject().put("default_value", Vendor_Description_Defaultvalue)
+                                                            .put("key", Vendor_Description_Key))
+                                                    .put("website", Website)
+                                                    .put("timestamp", currentTimestamp)
+                                                    .put("contact", new JSONObject().put("email", Contact)))))
+                            .put("support", new JSONObject().put("email", Support_Team))
+                            .put("service_provider", new JSONObject()
+                                    .put("guid", Service_Provider_guid)
+                                    .put("timestamp", currentTimestamp)
+                                    .put("service_provider_name", new JSONObject().put("default_value", Service_Provider_Name_Defaultvalue)
+                                            .put("key", Service_Provider_Name_Key)))
+                            .put("description", new JSONObject().put("default_value", Service_Provider_Description_Defaultvalue)
+                                    .put("key", Service_Provider_Description_Key))
+                            .put("service_owner", new JSONObject()
+                                    .put("guid", Service_Owner_guid)
+                                    .put("timestamp", currentTimestamp)
+                                    .put("description", new JSONObject().put("default_value", Service_Owner_Description_Defaultvalue)
+                                            .put("key", Service_Owner_Description_Key))
+                                    .put("service_owner_name", new JSONObject().put("default_value", Service_Owner_Name_Defaultvalue)
+                                            .put("key", Service_Owner_Name_Key))))
+                    .put("base_url_choice", new JSONArray()
+                            .put(new JSONObject()
+                                    .put("selector", "DefaultSelector")
+                                    .put("default_base_url", "http://")
+                                    .put("secure_base_url", "https://")))
+                    .put("Capability_Wanted", Capability_Wanted)
+                    .put("Services_Wanted", Services_Wanted)
+                    .put("message_type", new JSONObject().put("path", lti_path)
+                            .put("message_type", lti_message_type))
+                    .put("resource_type", new JSONObject().put("code", Resourse_Type_Code))
+                    .put("resource_name", new JSONObject().put("default_value", Resourse_Name_DefaultValue)
+                            .put("key", Resourse_Name_DefaultKey))
+                    .put("description", new JSONObject().put("default_value", Resourse_Description_DefaultValue)
+                            .put("key", Resourse_Description_DefaultKey))
+                    .put("Tool_Url", Tool_Url);
+        } catch (Exception e) {
+
+        }
+        ToolDetailsProcess db = new ToolDetailsProcess();
+        ArrayList<String> urls = null;
+        try {
+            urls = db.insert(toolProfile.toString());
+        } catch (JSONException ex) {
+            Logger.getLogger(Checkpara.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String url12[] = new String[2];
+        int i = 0;
+        Iterator it;
+        it = urls.iterator();
+        while (it.hasNext()) {
+            url12[i] = (String) it.next();
+            i = i + 1;
+        }
+
+        JSONArray jsonCapability = new JSONArray();
+
+        for (i = 0; i < Capability_Wanted.length; i++) {
+            jsonCapability.put(Capability_Wanted[i]);
+        }
+
+        JSONArray jsonUrl = new JSONArray();
+
+        for (i = 0; i < url12.length; i++) {
+            jsonUrl.put(url12[i]);
+        }
+        out.print("<!DOCTYPE html>\n"
+                + "<html>\n"
+                + "    <head>\n"
+                + "        <meta charset=\"utf-8\" />\n"
+                + "        <title>Tool Registration form </title>\n"
+                + "        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n"
+                + "\n"
+                + "        <link rel=\"stylesheet\" type=\"text/css\" href=\"Design/bootstrap/css/bootstrap.min.css\" />\n"
+                + "        <link rel=\"stylesheet\" type=\"text/css\" href=\"Design/font-awesome/css/font-awesome.min.css\" />\n"
+                + "\n"
+                + "        <script type=\"text/javascript\" src=\"Design/js/jquery-1.10.2.min.js\"></script>\n"
+                + "        <script type=\"text/javascript\" src=\"Design/bootstrap/js/bootstrap.min.js\"></script>\n"
+                + "\n"
+                + "    </head>\n"
+                + "    <body>\n"
+                + "\n"
+                + "        <div class=\"container\">\n"
+                + "\n"
+                + "            <div class=\"page-header\">\n"
+                + "                <h1>Capability Enabled <small></small></h1>\n"
+                + "            </div>\n"
+                + "\n"
+                + "            <!-- Registration form - START -->\n"
+                + "            <div class=\"container\">\n"
+                + "                <div class=\"row\">\n"
+                + "                    <form role=\"form\" action=\"FinalUrls\" method=\"POST\">\n"
+                + "                        <div class=\"col-lg-6\">\n"
+                + "                            <div class=\"well well-sm\"><strong><span class=\"glyphicon glyphicon-asterisk\"></span>Required Field</strong></div>\n"
+                + "                            <div class=\"form-group\">");
+
+        for (i = 0; i < jsonCapability.length(); i++) {
+            try {
+                out.print("<div class=\"container\">\n"
+                        + "                                    <h2>" + jsonCapability.getString(i) + "</h2>\n"
+                        + "                                    <div class=\"panel panel-default\">\n"
+                        + "                                        <div class=\"panel-body\">\n"
+                        + "                                            <div class=\"form-group\" style=\"margin-left: 30pt;\";\">\n"
+                        + "                                                <label for=\"InputName\">Name</label>\n"
+                        + "                                                <div class=\"input-group\">\n"
+                        + "                                                    <input type=\"text\" class=\"form-control\" name=\"" + jsonCapability.getString(i) + "/Name\" id=\"InputName\" placeholder=\"\" required>\n"
+                        + "                                                    <span class=\"input-group-addon\"><span class=\"glyphicon glyphicon-asterisk\"></span></span>\n"
+                        + "                                                </div>\n"
+                        + "                                            </div>\n"
+                        + "                                            <div class=\"form-group\" style=\"margin-left: 30pt;\";\">\n"
+                        + "                                                <label for=\"InputName\">Variable</label>\n"
+                        + "                                                <div class=\"input-group\">\n"
+                        + "                                                    <input type=\"text\" class=\"form-control\" name=\"" + jsonCapability.getString(i) + "/Variable\" id=\"InputName\" placeholder=\"\" required>\n"
+                        + "                                                    <span class=\"input-group-addon\"><span class=\"glyphicon glyphicon-asterisk\"></span></span>\n"
+                        + "                                                </div>\n"
+                        + "                                            </div>\n"
+                        + "                                        </div>\n"
+                        + "                                    </div>\n"
+                        + "                                </div>");
+            } catch (JSONException ex) {
+                Logger.getLogger(Checkpara.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+
+        out.print("                                                    <input type=\"hidden\" class=\"form-control\" name=\"" + "registerUrl" + "\" value = \"" + url12[0] + "\" id=\"InputName\" placeholder=\"\" required>\n"
+                                                                
+                + "                                                    <input type=\"hidden\" class=\"form-control\" name=\"" + "launchUrl" + "\" value = \"" + url12[1] + "\" id=\"InputName\" placeholder=\"\" required>\n"
+        + "                                                    <input type=\"hidden\" class=\"form-control\" name=\"" + "size" + "\" value = \"" + Capability_Wanted.length + "\" id=\"InputName\" placeholder=\"\" required>\n"
+                        
+        );
+        out.print("<input type=\"submit\" name=\"submit\" id=\"submit\" value=\"Submit\" class=\"btn btn-info pull-right\">\n"
+                + "                            </div>\n"
+                + "\n"
+                + "                        </div>\n"
+                + "                    </form>\n"
+                + "\n"
+                + "                </div>\n"
+                + "                <!-- Registration form - END -->\n"
+                + "\n"
+                + "            </div>\n"
+                + "        </div>\n"
+                + "\n"
+                + "\n"
+                + "    </body>\n"
+                + "</html>\n"
+                + "");
+
+    }
+
+    // Method to handle POST method request.
+    public void doPost(HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException {
+        doGet(request, response);
+    }
+}
